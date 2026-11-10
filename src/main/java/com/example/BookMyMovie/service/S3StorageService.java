@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.EncryptionTypeMismatchException;
+import software.amazon.awssdk.services.s3.model.GetObjectAclRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectAclResponse;
 import software.amazon.awssdk.services.s3.model.InvalidRequestException;
 import software.amazon.awssdk.services.s3.model.InvalidWriteOffsetException;
  import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -48,6 +51,15 @@ public class S3StorageService {
          s3Client.putObject(putObjectAclRequest ,  RequestBody.fromBytes(file.getBytes()) );
 
         return  endpoint+ "/" + bucketName + "/" + uniqueOriginalFileName;
+    }
+
+    public ResponseBytes<GetObjectAclResponse> showMovie(String key){
+      GetObjectAclRequest getObjectAclRequest=GetObjectAclRequest.builder()
+      .bucket( bucketName)
+      .key(key)
+      .build();
+
+      return  s3Client.getObjectAsBytes(getObjectAclRequest);
     }
 
 }
