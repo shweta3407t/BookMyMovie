@@ -14,52 +14,54 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.EncryptionTypeMismatchException;
 import software.amazon.awssdk.services.s3.model.GetObjectAclRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectAclResponse;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.InvalidRequestException;
 import software.amazon.awssdk.services.s3.model.InvalidWriteOffsetException;
- import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.model.TooManyPartsException;
 
-@Service 
+@Service
 public class S3StorageService {
 
-     private  String endpoint;
-     private final String bucketName;
-     private final S3Client s3Client;
+     String endpoint;
+       String bucketName;
+       S3Client s3Client;
 
-     public S3StorageService(S3Client s3Client ,
-        @Value  ("${minio.endpoint}") String endpoint ,
-        @Value  ("${minio.bucket-name}") String bucketName 
+   public S3StorageService(S3Client s3Client,
+         @Value("${minio.endpoint}") String endpoint,
+         @Value("${minio.bucket-name}") String bucketName
 
-     ){
-        this.bucketName=bucketName;
-        this.s3Client=s3Client;
-        this.endpoint=endpoint;
-     }
+   ) {
+      this.bucketName = bucketName;
+      this.s3Client = s3Client;
+      this.endpoint = endpoint;
+   }
 
+   public String uploadFile(MultipartFile file, String uniqueOriginalFileName)
+         throws InvalidRequestException, InvalidWriteOffsetException, TooManyPartsException,
+         EncryptionTypeMismatchException, S3Exception, AwsServiceException, SdkClientException, IOException {
 
- 
+      PutObjectRequest putObjectAclRequest = PutObjectRequest.builder()
+            .bucket(bucketName)
+            .key(uniqueOriginalFileName)
+            .contentType(file.getContentType())
+            .build();
 
-    public  String uploadFile( MultipartFile file , String  uniqueOriginalFileName ) throws InvalidRequestException, InvalidWriteOffsetException, TooManyPartsException, EncryptionTypeMismatchException, S3Exception, AwsServiceException, SdkClientException, IOException{
+      s3Client.putObject(putObjectAclRequest, RequestBody.fromBytes(file.getBytes()));
 
-         PutObjectRequest putObjectAclRequest = PutObjectRequest.builder()
-         .bucket( bucketName)
-         .key( uniqueOriginalFileName)
-         .contentType(file.getContentType())
-         .build();
+      return endpoint + "/" + bucketName + "/" + uniqueOriginalFileName;
+   }
 
-         s3Client.putObject(putObjectAclRequest ,  RequestBody.fromBytes(file.getBytes()) );
+   // display poster
+   public ResponseBytes<GetObjectResponse> displayMoviePoster(String key) {
+      GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+            .bucket(bucketName)
+            .key(key)
+            .build();
 
-        return  endpoint+ "/" + bucketName + "/" + uniqueOriginalFileName;
-    }
-
-    public ResponseBytes<GetObjectAclResponse> showMovie(String key){
-      GetObjectAclRequest getObjectAclRequest=GetObjectAclRequest.builder()
-      .bucket( bucketName)
-      .key(key)
-      .build();
-
-      return  s3Client.getObjectAsBytes(getObjectAclRequest);
-    }
+      return s3Client.getObjectAsBytes(getObjectRequest);
+   }
 
 }
