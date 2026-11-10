@@ -1,31 +1,52 @@
 package com.example.BookMyMovie.models;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-@Entity 
+@Entity
 public class Movie {
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private  String name;
-
-    private  String  posterThumbnailUrl ;
-
+    private String name;
+    private String posterThumbnailUrl;
     private Long price;
- 
+    private String language;
+    private LocalDate releaseData;
 
-    public Movie(Long id, String name, String posterThumbnailUrl, Long price) {
+    public Movie(Long id, String name, String posterThumbnailUrl, Long price, String language, LocalDate releaseData,
+           ) {
         this.id = id;
         this.name = name;
-        this.posterThumbnailUrl = posterThumbnailUrl;
+     this.posterThumbnailUrl = posterThumbnailUrl;
         this.price = price;
+        this.language = language;
+        this.releaseData = releaseData;
+     }
+
+    public String getLanguage() {
+        return language;
     }
 
-    public Movie(){}
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public LocalDate getReleaseData() {
+        return releaseData;
+    }
+
+    public void setReleaseData(LocalDate releaseData) {
+        this.releaseData = releaseData;
+    }
+
+    public Movie() {
+    }
 
     public Long getId() {
         return id;
@@ -58,9 +79,5 @@ public class Movie {
     public void setPrice(Long price) {
         this.price = price;
     }
-
-    
-    
-
 
 }

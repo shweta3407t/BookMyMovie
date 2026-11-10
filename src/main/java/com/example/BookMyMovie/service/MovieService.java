@@ -11,58 +11,51 @@ import com.example.BookMyMovie.models.Movie;
 import com.example.BookMyMovie.repository.MovieRepository;
 
 import net.coobird.thumbnailator.Thumbnails;
-    import org.springframework.mock.web.MockMultipartFile;
- 
+// import org.springframework.mock.web.MockMultipartFile;
 
 @Service
 public class MovieService {
 
-    @Autowired 
-    public  S3StorageService s3StorageService;
-    
+    @Autowired
+    public S3StorageService s3StorageService;
+
     @Autowired
     public MovieRepository movieRepository;
 
-    public void addMovie(String movieName, MultipartFile poster , Long price ) {
+    public void addMovie(String movieName, MultipartFile poster, Long price) {
 
         Movie movie = new Movie();
         movie.setName(movieName);
         movie.setPrice(price);
 
- 
-        //unique file name 
+        // unique file name
         String uniquePosterFileName = UUID.randomUUID() + "-thumbnail-" + poster.getOriginalFilename();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-         try {
- 
+        try {
 
-             Thumbnails.of(poster.getInputStream())
-         .scale(1.0)
-         .outputQuality(0.75)
-         .toOutputStream( outputStream);
-         } catch (Exception e) {
+            Thumbnails.of(poster.getInputStream())
+                    .scale(1.0)
+                    .outputQuality(0.75)
+                    .toOutputStream(outputStream);
+        } catch (Exception e) {
             // TODO: handle exception
-         }
+        }
 
+        // // convert byte[] into multipart
+        // MultipartFile compressedThumbnailFile = new MockMultipartFile(
+        //         "file",
+        //         uniquePosterFileName,
+        //         poster.getContentType(),
+        //         outputStream.toByteArray());
 
-         //convert byte[] into  multipart
-         MultipartFile c =new MockMultipa
-        //  MultipartFile compressedThumbnailFile =new MockMultipartFile(
-        //     "file" ,
-        //     uniquePosterFileName ,
-        //     poster.getContentType() , 
-        //     outputStream.toByteArray()
-        //  ) ;
+        // // minio store
+        // String posterThumbnailUrl = s3StorageService.uploadFile(compressedThumbnailFile, uniquePosterFileName);
 
-         //minio store 
-        String posterThumbnailUrl = s3StorageService.uploadFile(compressedThumbnailFile , uniquePosterFileName);
- 
-         //store in db
-        movie.setPosterThumbnailUrl(posterThumbnailUrl);
+        // // store in db
+        // movie.setPosterThumbnailUrl(posterThumbnailUrl);
 
- 
     }
 
 }

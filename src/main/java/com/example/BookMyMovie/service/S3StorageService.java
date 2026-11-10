@@ -13,8 +13,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.EncryptionTypeMismatchException;
 import software.amazon.awssdk.services.s3.model.InvalidRequestException;
 import software.amazon.awssdk.services.s3.model.InvalidWriteOffsetException;
-import software.amazon.awssdk.services.s3.model.PutObjectAclRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.model.TooManyPartsException;
 
