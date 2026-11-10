@@ -1,4 +1,4 @@
-package com.example.BookMyMovie.entity;
+package com.example.BookMyMovie.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,15 +13,19 @@ public class Movie {
 
     private  String name;
 
-     
-
     private  String  posterThumbnailUrl ;
 
-    public Movie(Long id, String name, String posterThumbnailUrl) {
+    private Long price;
+ 
+
+    public Movie(Long id, String name, String posterThumbnailUrl, Long price) {
         this.id = id;
         this.name = name;
         this.posterThumbnailUrl = posterThumbnailUrl;
+        this.price = price;
     }
+
+    public Movie(){}
 
     public Long getId() {
         return id;
@@ -47,14 +51,16 @@ public class Movie {
         this.posterThumbnailUrl = posterThumbnailUrl;
     }
 
-    
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
 
     
-     
-
-
-
-
+    
 
 
 }
