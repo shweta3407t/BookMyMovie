@@ -22,6 +22,5 @@ public class Seat {
     private String seatNumber;
 
     private String seatType;
-
-     private SeatStatus status;
+ 
 }

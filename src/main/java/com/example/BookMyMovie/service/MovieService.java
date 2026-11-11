@@ -41,14 +41,13 @@ public class MovieService {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try {
-
             // compress image byte
             Thumbnails.of(poster.getInputStream())
                     .scale(1.0)
                     .outputQuality(0.75)
                     .toOutputStream(outputStream);
         } catch (Exception e) {
-            // TODO: handle exception
+            
         }
 
         /// convert byte[] into multipart
@@ -59,11 +58,12 @@ public class MovieService {
                 poster.getOriginalFilename(),
                 poster.getContentType());
 
-        // minio store
-        // String posterThumbnailUrl = s3StorageService.uploadFile(compressedThumbnailFile, uniquePosterFileName);
+        // minio store 
+        //TODO:access key me gadbad h
+        String posterThumbnailUrl = s3StorageService.uploadFile(compressedThumbnailFile, uniquePosterFileName);
 
         // store in db
-        movie.setPosterThumbnailUrl( "uuuuuuuuuuuuuuuuuuuuuuuuu");
+        movie.setPosterThumbnailUrl(  posterThumbnailUrl);
 
         movieRepository.save(movie);
 
