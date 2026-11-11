@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.BookMyMovie.models.Seat;
 import com.example.BookMyMovie.service.TheaterService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,12 +32,12 @@ public class BookingSeatController {
 
 
     @GetMapping("/display")
-    public  ResponseEntity<String>  displaySeat() {
+    public  ResponseEntity< Seat[][]>  displaySeat() {
         
-        theaterService.displaySeat();
+        Seat[][] response =theaterService.displaySeat();
 
 
-        return ResponseEntity.ok( "display seat ");
+        return ResponseEntity.ok( response);
     }
     
     
